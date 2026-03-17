@@ -1,0 +1,17 @@
+{
+  "name": "@marwantech/graphql-schema-builder",
+  "version": "0.1.0",
+  "description": "Programmatic GraphQL schema builder with type-safe resolvers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["graphql", "schema", "builder", "api", "typescript"],
+  "author": "Marwan Saleh",
+  "license": "MIT",
+  "peerDependencies": {
+    "graphql": ">=16.0.0"
+  }
+}
