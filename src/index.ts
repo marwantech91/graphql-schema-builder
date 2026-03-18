@@ -261,4 +261,9 @@ export function createSchema(): SchemaBuilder {
   return new SchemaBuilder();
 }
 
+/** Check if a type name is a built-in GraphQL scalar */
+export function isScalarType(name: string): name is ScalarName {
+  return ['String', 'Int', 'Float', 'Boolean', 'ID'].includes(name);
+}
+
 export default SchemaBuilder;
