@@ -257,6 +257,11 @@ export class SchemaBuilder {
   }
 }
 
+/** Check whether the builder has a registered type (object or input) */
+export function hasType(builder: SchemaBuilder, name: string): boolean {
+  return (builder as any).types.has(name) || (builder as any).inputTypes.has(name);
+}
+
 export function createSchema(): SchemaBuilder {
   return new SchemaBuilder();
 }
