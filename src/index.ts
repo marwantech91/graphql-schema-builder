@@ -271,4 +271,52 @@ export function isScalarType(name: string): name is ScalarName {
   return ['String', 'Int', 'Float', 'Boolean', 'ID'].includes(name);
 }
 
+/** Generate a CRUD schema for a type with standard query and mutation operations */
+export function createCrudSchema(
+  typeName: string,
+  fields: Record<string, FieldDefinition | ScalarName>
+): SchemaBuilder {
+  const builder = new SchemaBuilder();
+  const inputName = `${typeName}Input`;
+  const inputFields: Record<string, FieldDefinition | ScalarName> = {};
+
+  for (const [key, value] of Object.entries(fields)) {
+    if (key === 'id') continue;
+    inputFields[key] = value;
+  }
+
+  builder
+    .type(typeName, { id: { type: 'ID', required: true }, ...fields })
+    .input(inputName, inputFields)
+    .query(`get${typeName}`, {
+      type: typeName,
+      args: { id: { type: 'ID', required: true } },
+    })
+    .query(`list${typeName}s`, {
+      type: typeName,
+      list: true,
+      args: {
+        limit: { type: 'Int', defaultValue: 20 },
+        offset: { type: 'Int', defaultValue: 0 },
+      },
+    })
+    .mutation(`create${typeName}`, {
+      type: typeName,
+      args: { input: { type: inputName, required: true } },
+    })
+    .mutation(`update${typeName}`, {
+      type: typeName,
+      args: {
+        id: { type: 'ID', required: true },
+        input: { type: inputName, required: true },
+      },
+    })
+    .mutation(`delete${typeName}`, {
+      type: 'Boolean',
+      args: { id: { type: 'ID', required: true } },
+    });
+
+  return builder;
+}
+
 export default SchemaBuilder;
